@@ -7,7 +7,8 @@
   "author": "henric.trotzig@happo.io",
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint ."
   },
   "dependencies": {
     "jimp": "^0.6.4",
@@ -16,6 +17,7 @@
     "request-promise-native": "^1.0.7"
   },
   "devDependencies": {
+    "eslint": "^6.0.1",
     "jest": "^24.8.0"
   }
 }

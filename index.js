@@ -123,5 +123,6 @@ module.exports = async function happoDeepCompare(
     { apiKey, apiSecret },
   );
 
+  log(secondCompareResult.summary);
   return ignored;
 };

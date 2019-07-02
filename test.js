@@ -6,10 +6,13 @@ jest.mock('./makeRequest');
 let subject;
 let opts;
 let log;
+let compareResult;
+let env;
 
 beforeEach(() => {
   log = [];
   compareResult = {
+    summary: 'Mocked summary',
     diffs: [
       [
         {
@@ -45,6 +48,7 @@ it('succeeds', async () => {
     'Comparing abc with xyz...',
     'Found 1 diffs to deep-compare using threshold 0.05',
     '✗ Foo - bar - chrome diff (0.07157695903064663) is larger than threshold',
+    'Mocked summary',
   ]);
 });
 
@@ -133,6 +137,7 @@ describe('when threshold is larger than diff', () => {
       'Comparing abc with xyz...',
       'Found 1 diffs to deep-compare using threshold 0.1',
       '✓ Foo - bar - chrome diff (0.07157695903064663) is within threshold',
+      'Mocked summary',
     ]);
   });
 });
