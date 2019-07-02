@@ -18,7 +18,7 @@ commander
     'associate the run with a message (e.g. commit subject)',
   )
   .option('-a, --author <email>', 'the author of the commit')
-  .option('--api-key <key>>', 'the API key for the account')
+  .option('--api-key <key>', 'the API key for the account')
   .option('--api-secret <secret>', 'the API secret for the account')
   .option(
     '--endpoint <endpoint>',
