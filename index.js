@@ -86,14 +86,14 @@ module.exports = async function happoDeepCompare(
   );
   await Promise.all(
     firstCompareResult.diffs.map(async ([before, after]) => {
-      const diff = await compareSnapshots({ before, after });
+      const diff = await compareSnapshots({ before, after, endpoint });
       if (diff < threshold) {
         log(
           `✓ ${after.component} - ${after.variant} - ${
             after.target
           } diff (${diff}) is within threshold`,
         );
-        await ignore({ before, after, apiKey, apiSecret });
+        await ignore({ before, after, apiKey, apiSecret, endpoint });
         resolved.push([before, after]);
       } else {
         log(

@@ -27,22 +27,27 @@ commander
   )
   .usage('happo-deep-compare <sha1> <sha2> [options]')
   .action(async (sha1, sha2) => {
-    const result = await happoDeepCompare({
-      sha1,
-      sha2,
-      project: commander.project,
-      apiKey: commander.apiKey,
-      apiSecret: commander.apiSecret,
-      endpoint: commander.endpoint,
-      threshold: parseInt(commander.threshold, 10),
-      link: commander.link,
-      message: commander.message,
-      author: commander.author,
-    });
-    if (result.equal) {
-      process.exit(0);
-    } else {
-      process.exit(113);
+    try {
+      const result = await happoDeepCompare({
+        sha1,
+        sha2,
+        project: commander.project,
+        apiKey: commander.apiKey,
+        apiSecret: commander.apiSecret,
+        endpoint: commander.endpoint,
+        threshold: parseFloat(commander.threshold),
+        link: commander.link,
+        message: commander.message,
+        author: commander.author,
+      });
+      if (result.equal) {
+        process.exit(0);
+      } else {
+        process.exit(113);
+      }
+    } catch (e) {
+      console.error(e);
+      process.exit(1);
     }
   });
 

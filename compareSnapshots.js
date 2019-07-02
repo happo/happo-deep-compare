@@ -10,10 +10,17 @@ function createHash(data) {
     .digest('hex');
 }
 
-module.exports = async function compareSnapshots({ before, after }) {
+function makeAbsolute(url, endpoint) {
+  if (url.startsWith('http')) {
+    return url;
+  }
+  return `${endpoint}${url}`;
+}
+
+module.exports = async function compareSnapshots({ before, after, endpoint }) {
   const [image1, image2] = await Promise.all([
-    Jimp.read(before.url),
-    Jimp.read(after.url),
+    Jimp.read(makeAbsolute(before.url, endpoint)),
+    Jimp.read(makeAbsolute(after.url, endpoint)),
   ]);
 
   const { diff } = imageDiff(
