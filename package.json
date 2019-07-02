@@ -6,6 +6,9 @@
   "repository": "git@github.com:happo/happo-deep-compare.git",
   "author": "henric.trotzig@happo.io",
   "license": "MIT",
+  "bin": {
+    "happo-deep-compare": "./cli.js"
+  },
   "scripts": {
     "test": "jest",
     "lint": "eslint ."
