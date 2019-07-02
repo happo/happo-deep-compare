@@ -78,7 +78,7 @@ module.exports = async function happoDeepCompare(
     { apiKey, apiSecret },
   );
 
-  const ignored = [];
+  const resolved = [];
   log(
     `Found ${
       firstCompareResult.diffs.length
@@ -94,7 +94,7 @@ module.exports = async function happoDeepCompare(
           } diff (${diff}) is within threshold`,
         );
         await ignore({ before, after, apiKey, apiSecret });
-        ignored.push([before, after]);
+        resolved.push([before, after]);
       } else {
         log(
           `✗ ${after.component} - ${after.variant} - ${
@@ -124,5 +124,5 @@ module.exports = async function happoDeepCompare(
   );
 
   log(secondCompareResult.summary);
-  return ignored;
+  return Object.assign({ resolved }, secondCompareResult);
 };

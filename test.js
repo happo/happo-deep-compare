@@ -13,6 +13,7 @@ beforeEach(() => {
   log = [];
   compareResult = {
     summary: 'Mocked summary',
+    equal: false,
     diffs: [
       [
         {
@@ -43,7 +44,7 @@ beforeEach(() => {
 
 it('succeeds', async () => {
   const result = await subject();
-  expect(result).toEqual([]);
+  expect(result.resolved).toEqual([]);
   expect(log).toEqual([
     'Comparing abc with xyz...',
     'Found 1 diffs to deep-compare using threshold 0.05',
@@ -131,7 +132,7 @@ describe('when threshold is larger than diff', () => {
 
   it('returns the diff that was deep-compared', async () => {
     const result = await subject();
-    expect(result).toEqual(compareResult.diffs);
+    expect(result.resolved).toEqual(compareResult.diffs);
 
     expect(log).toEqual([
       'Comparing abc with xyz...',
