@@ -1,6 +1,6 @@
 {
   "name": "happo-deep-compare",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A replacement tool for `happo compare` that allow you to use a threshold",
   "main": "index.js",
   "repository": "git@github.com:happo/happo-deep-compare.git",
