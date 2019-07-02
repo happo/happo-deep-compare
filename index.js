@@ -18,8 +18,25 @@ function validateArguments({ sha1, sha2, apiKey, apiSecret, threshold }) {
     throw new Error('Missing `threshold` argument');
   }
   if (typeof threshold !== 'number' || threshold > 1 || threshold < 0) {
-    throw new Error('Argument `threshold` needs to be a number between 0 and 1');
+    throw new Error(
+      'Argument `threshold` needs to be a number between 0 and 1',
+    );
   }
+}
+
+function ignore({ before, after, apiKey, apiSecret, endpoint }) {
+  return makeRequest(
+    {
+      url: `${endpoint}/api/ignored-diffs`,
+      method: 'POST',
+      json: true,
+      body: {
+        snapshot1Id: before.id,
+        snapshot2Id: after.id,
+      },
+    },
+    { apiKey, apiSecret },
+  );
 }
 
 module.exports = async function happoDeepCompare(
@@ -61,7 +78,7 @@ module.exports = async function happoDeepCompare(
     { apiKey, apiSecret },
   );
 
-  const toIgnore = [];
+  const ignored = [];
   log(
     `Found ${
       firstCompareResult.diffs.length
@@ -71,12 +88,13 @@ module.exports = async function happoDeepCompare(
     firstCompareResult.diffs.map(async ([before, after]) => {
       const diff = await compareSnapshots({ before, after });
       if (diff < threshold) {
-        toIgnore.push([before, after]);
         log(
           `✓ ${after.component} - ${after.variant} - ${
             after.target
           } diff (${diff}) is within threshold`,
         );
+        await ignore({ before, after, apiKey, apiSecret });
+        ignored.push([before, after]);
       } else {
         log(
           `✗ ${after.component} - ${after.variant} - ${
@@ -87,6 +105,9 @@ module.exports = async function happoDeepCompare(
     }),
   );
 
+  // Make second compare call to finalize the deep compare. The second call will
+  // cause a status to be posted to the PR (if applicable). Any ignored diffs
+  // from the first call will be excluded from the result.
   const secondCompareResult = await makeRequest(
     {
       url: `${endpoint}/api/reports/${sha1}/compare/${sha2}`,
@@ -102,5 +123,5 @@ module.exports = async function happoDeepCompare(
     { apiKey, apiSecret },
   );
 
-  return toIgnore;
+  return ignored;
 };
