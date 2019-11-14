@@ -42,15 +42,32 @@ beforeEach(() => {
   subject = () => happoDeepCompare(opts, env, msg => log.push(msg));
 });
 
-it('succeeds', async () => {
+it('uses a default threshold', async () => {
   const result = await subject();
-  expect(result.resolved).toEqual([]);
   expect(log).toEqual([
     'Comparing abc with xyz...',
     'Found 1 diffs to deep-compare using threshold 0.05',
-    '✗ Foo - bar - chrome diff (0.07157695903064663) is larger than threshold',
+    '✓ Foo - bar - chrome diff (0.0004244855470602604) is within threshold',
     'Mocked summary',
   ]);
+  expect(result.resolved).toEqual(compareResult.diffs);
+});
+
+describe('when threshold is lower than diff', () => {
+  beforeEach(() => {
+    opts.threshold = 0.0001;
+  });
+
+  it('reports diffs', async () => {
+    const result = await subject();
+    expect(log).toEqual([
+      'Comparing abc with xyz...',
+      'Found 1 diffs to deep-compare using threshold 0.0001',
+      '✗ Foo - bar - chrome diff (0.0004244855470602604) is larger than threshold',
+      'Mocked summary',
+    ]);
+    expect(result.resolved).toEqual([]);
+  });
 });
 
 describe('when apiKey is missing', () => {
@@ -137,7 +154,7 @@ describe('when threshold is larger than diff', () => {
     expect(log).toEqual([
       'Comparing abc with xyz...',
       'Found 1 diffs to deep-compare using threshold 0.1',
-      '✓ Foo - bar - chrome diff (0.07157695903064663) is within threshold',
+      '✓ Foo - bar - chrome diff (0.0004244855470602604) is within threshold',
       'Mocked summary',
     ]);
   });
