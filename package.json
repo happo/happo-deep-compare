@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "commander": "^2.20.0",
-    "jimp": "^0.6.4",
+    "jimp": "^0.8.5",
     "jsonwebtoken": "^8.5.1",
     "lcs-image-diff": "^1.0.0",
     "request": "^2.88.0",
